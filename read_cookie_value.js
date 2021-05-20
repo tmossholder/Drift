@@ -10,7 +10,7 @@ function readCookie(name) {
     return null;
 }
 //Call readCookie function to get value of user's Marketo cookie
-var mkto_value = readCookie('_mkto_trk');
+//var mkto_value = readCookie('_mkto_trk');
 // you could add set user attributes below here as well
 drift.on('ready', function() {
   drift.api.setUserAttributes({
@@ -18,11 +18,3 @@ drift.on('ready', function() {
     lang: 'en',
   })
 })
-// 1. determine which language snippet to show
-     //  a. check for some value (e.g. in a cookie, or in the url)
-      // b. lookup that value's snippet ID in mapping table
-      // c. return that value as the embedId that is passed into drift.load() method
-  // 2. playbook targeting
-      // a. could be url or could be cookie value - need to think through that with the customer's input
-      // b. Demand Gen playbook from Demand Gen workspace
-          // i. target to the proper thing for that playbook
