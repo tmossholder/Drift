@@ -1,0 +1,11 @@
+// load Drift and LiveAgent here
+// if Drift should fire first, hide LiveAgent -- if the other way, hide Drift.
+
+
+window.drift.on("conversation:buttonClicked", function(data) {
+  console.log(data);
+  if (data.buttonBody == "File a ticket") { // be sure to change text to match your implementaton
+    drift.unload();
+    liveagent.startChat('57370000000TN5N'); // change for your live agent ID
+  };
+});
