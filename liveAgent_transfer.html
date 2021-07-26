@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css"  />
+
+    <!-- Beginning of Drift Snippet -->
+
+    <script>
+      "use strict";
+
+      !function() {
+        var t = window.driftt = window.drift = window.driftt || [];
+        if (!t.init) {
+          if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+          t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
+          t.factory = function(e) {
+            return function() {
+              var n = Array.prototype.slice.call(arguments);
+              return n.unshift(e), t.push(n), t;
+            };
+          }, t.methods.forEach(function(e) {
+            t[e] = t.factory(e);
+          }), t.load = function(t) {
+            var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+            o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+            var i = document.getElementsByTagName("script")[0];
+            i.parentNode.insertBefore(o, i);
+          };
+        }
+      }();
+      drift.SNIPPET_VERSION = '0.3.1';
+      drift.load('uttup3cu7r8a');
+  </script>
+  <!-- End of Async Drift Code -->
+</head>
+
+<body>
+  <h1>Drift to Salesforce Live Agent chat transfer</h1>
+
+
+  <!-- Begin Salesforce Chat -->
+
+  <script type='text/javascript' src='https://service.force.com/embeddedservice/5.0/esw.min.js'></script>
+  <script type='text/javascript'>
+    var initESW = function(gslbBaseURL) {
+      embedded_svc.settings.displayHelpButton = false; //False so not displayed until Drift button clicked
+
+      //example options for configuring the Salesforce Live Agent-these are provided in the boilerplate
+
+      embedded_svc.settings.language = ''; //For example, enter 'en' or 'en-US'
+
+      //embedded_svc.settings.defaultMinimizedText = '...'; //(Defaults to Chat with an Expert)
+      //embedded_svc.settings.disabledMinimizedText = '...'; //(Defaults to Agent Offline)
+
+      //embedded_svc.settings.loadingText = ''; //(Defaults to Loading)
+      //embedded_svc.settings.storageDomain = 'yourdomain.com'; //(Sets the domain for your deployment so that visitors can navigate subdomains during a chat session)
+
+      // Settings for Chat
+      //embedded_svc.settings.directToButtonRouting = function(prechatFormData) {
+        // Dynamically changes the button ID based on what the visitor enters in the pre-chat form.
+        // Returns a valid button ID.
+      //};
+      //embedded_svc.settings.prepopulatedPrechatFields = {}; //Sets the auto-population of pre-chat form fields
+      //embedded_svc.settings.fallbackRouting = []; //An array of button IDs, user IDs, or userId_buttonId
+      //embedded_svc.settings.offlineSupportMinimizedText = '...'; //(Defaults to Contact Us)
+
+      embedded_svc.settings.enabledFeatures = ['LiveAgent'];
+      embedded_svc.settings.entryFeature = 'LiveAgent';
+
+      embedded_svc.init(
+        'https://driftcom2-dev-ed.my.salesforce.com',
+        'https://driftcom2-dev-ed-17aa71d4931.na162.force.com/defaulthelpcenter14Jul',
+        gslbBaseURL,
+        '00D5e000002GHTO',
+        'Test_Group',
+        {
+          baseLiveAgentContentURL: 'https://c.la4-c1-ia4.salesforceliveagent.com/content',
+          deploymentId: '5725e0000005BJe',
+          buttonId: '5735e0000005CXy',
+          baseLiveAgentURL: 'https://d.la4-c1-ia4.salesforceliveagent.com/chat',
+          eswLiveAgentDevName: 'Test_Group',
+          isOfflineSupportEnabled: false
+        }
+      );
+    };
+
+    if (!window.embedded_svc) {
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://driftcom2-dev-ed.my.salesforce.com/embeddedservice/5.0/esw.min.js');
+      s.onload = function() {
+        initESW(null);
+      };
+      document.body.appendChild(s);
+    } else {
+      initESW('https://service.force.com');
+    }
+  </script>
+
+  <!-- End Salesforce Chat -->
+
+  <!-- Salesforce bootstrap Function -->
+  <script> function bootstrapChat(){
+      embedded_svc.bootstrapEmbeddedService();
+    }
+  </script>
+
+
+  <!-- Drift Listener -->
+  <script>
+    window.drift.on("conversation:buttonClicked", function(data) {
+      console.log(data);
+      if (data.buttonBody == "Other Support") {
+        drift.unload();
+
+        embedded_svc.settings.prepopulatedPrechatFields = {
+            Subject: "Request for tech Support from Drift"
+          };
+        bootstrapChat();  //activate the Salesforce Live Agent
+      };
+    });
+  </script>
+</body>
+</html>
